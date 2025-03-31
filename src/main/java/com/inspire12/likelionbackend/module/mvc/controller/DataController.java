@@ -1,5 +1,6 @@
 package com.inspire12.likelionbackend.module.mvc.controller;
 
+import com.inspire12.likelionbackend.common.execption.ErrorCode;
 import com.inspire12.likelionbackend.common.execption.LikelionException;
 import com.inspire12.likelionbackend.module.mvc.model.Customer;
 import com.inspire12.likelionbackend.module.mvc.model.OrderRequest;
