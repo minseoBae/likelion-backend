@@ -45,9 +45,9 @@ public class CompleteFutureTestService {
                 log.info(s);
             }
         };
-        CompletableFuture.supplyAsync(/* TODO */)
-                .thenApply(/* TODO */)
-                .thenAccept(/* TODO */);
+        CompletableFuture.supplyAsync(heavyTask) // 무거운 작업을 먼저 넣는다 비동기 작업이기 때문에
+                .thenApply(plusTask)
+                .thenAccept(consume);
     }
 
     public String getHelloSync() {
