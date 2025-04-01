@@ -1,5 +1,7 @@
 package com.inspire12.likelionbackend.module.jpa.service;
 
+import com.inspire12.likelionbackend.module.jpa.model.entity.OrderEntity;
+import com.inspire12.likelionbackend.module.jpa.model.mapper.OrderMapper;
 import com.inspire12.likelionbackend.module.jpa.model.request.OrderRequest;
 import com.inspire12.likelionbackend.module.jpa.model.response.OrderResponse;
 import com.inspire12.likelionbackend.module.jpa.repository.OrderJpaRepository;
@@ -7,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,26 +21,32 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponse getOrder(Long orderId) {
-        // TODO
-        throw new EntityNotFoundException("주문 없음");
+        OrderEntity order = orderJpaRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("주문 없음"));
+        return OrderMapper.fromEntity(order);
+
     }
 
     @Transactional
     public OrderResponse saveOrder(OrderRequest request) {
-        // TODO
-        throw new EntityNotFoundException("주문 없음");
+        OrderEntity savedOrder = OrderMapper.toEntity(request);
+        orderJpaRepository.save(savedOrder);
+        return OrderMapper.fromEntity(savedOrder);
     }
 
     @Transactional
     public void deleteOrder(Long orderId) {
-        // TODO
-        throw new EntityNotFoundException("주문 없음");
-
+        OrderEntity deletedOrder = orderJpaRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("주문 없음"));
+        orderJpaRepository.delete(deletedOrder);
     }
 
     @Transactional
     public OrderResponse updateTotalAmount(Long orderId, Integer newAmount) {
-        // TODO
-        throw new EntityNotFoundException("주문 없음");
+        OrderEntity updatedOrderEntity = orderJpaRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("주문 없음"));
+        updatedOrderEntity.changeTotalAmount(newAmount);
+
+        return OrderMapper.fromEntity(updatedOrderEntity);
     }
 }
