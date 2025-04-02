@@ -11,36 +11,40 @@ public class UserService {
 
     public void registerUser(String username, String email) {
         // 로깅
-        long start = System.currentTimeMillis();
-        log.info("사용자 등록 시작 - username: {}", username);
+        long start = logStartExecutionTime(username);
         // registerUser 에서 유저 입력 유효성 체크를 담당하는 파트를 담는다
-        if (username == null || email == null) {
-            throw new IllegalArgumentException("입력값이 비어 있습니다.");
-        }
+        validateUserInput(username, email);
         // 이메일 검증
-        if (!email.endsWith("@example.com")) {
-            throw new SecurityException("허용되지 않은 이메일 도메인입니다.");
-        }
+        validateEmail(email);
         // 핵심 로직
         log.info("DB에 사용자 저장 로직 실행");
         // 로깅
-        long end = System.currentTimeMillis();
+        logEndExecutionTime(username, start, System.currentTimeMillis());
+    }
+
+    private long logStartExecutionTime(String username) {
+        // TODO registerUser 에서 로깅을 담당하는 파트를 담는다
+        // 로깅
+        long start = System.currentTimeMillis();
+        log.info("사용자 등록 시작 - username: {}", username);
+        return start;
+    }
+
+    private void logEndExecutionTime(String username, long start, long end) {
+        // TODO registerUser 에서 로깅을 담당하는 파트를 담는다
         log.info("사용자 등록 완료 - username: {} 걸린 시간: {}", username, end - start);
-    }
-
-    private void logStartExecutionTime(String username) {
-        // TODO registerUser 에서 로깅을 담당하는 파트를 담는다
-
-    }
-
-    private void logEndExecutionTime(String username, long end) {
-        // TODO registerUser 에서 로깅을 담당하는 파트를 담는다
-
     }
     private void validateUserInput(String username, String email) {
         // TODO registerUser 에서 유저 입력 유효성 체크를 담당하는 파트를 담는다
         // 유효성 검사
-
+        if (username == null || email == null) {
+            throw new IllegalArgumentException("입력값이 비어 있습니다.");
+        }
+    }
+    private void validateEmail(String email) {
+        if (!email.endsWith("@example.com")) {
+            throw new SecurityException("허용되지 않은 이메일 도메인입니다.");
+        }
     }
 
 }
