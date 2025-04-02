@@ -17,6 +17,19 @@ public class UserInputValidateAspect {
     @Around("userInputValidatePointcut()")
     public Object userInputValidate(ProceedingJoinPoint joinPoint) throws Throwable {
         /* TODO username, email 두 input 값을 확인하는 코드와 함수 실행시점인 jointPoint.proceed() 넣어주세요 */
+        Object args = joinPoint.getArgs();
 
+        String username = (String) joinPoint.getArgs()[0];
+        String email = (String) joinPoint.getArgs()[1];
+
+        if (username == null || email == null) {
+            throw new IllegalArgumentException("입력값이 비어 있습니다.");
+        }
+        // 이메일 검증
+        if (!email.endsWith("@example.com")) {
+            throw new SecurityException("허용되지 않은 이메일 도메인입니다.");
+        }
+
+        return joinPoint.proceed();
     }
 }
