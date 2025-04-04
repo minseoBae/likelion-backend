@@ -1,5 +1,6 @@
 package com.inspire12.likelionbackend.module.jpa.service;
 
+import com.inspire12.likelionbackend.module.core.aop.Config.PerformanceCheck;
 import com.inspire12.likelionbackend.module.jpa.model.dto.OrderSum;
 import com.inspire12.likelionbackend.module.jpa.model.entity.OrderEntity;
 import com.inspire12.likelionbackend.module.jpa.model.mapper.OrderMapper;
@@ -12,6 +13,7 @@ import com.inspire12.likelionbackend.module.jpa.repository.OrderJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +70,7 @@ public class OrderService {
         return new OrderSumResponse(orderSum.getCustomerId(), orderSum.getCount());
     }
 
+    @PerformanceCheck
     public OrderListResponse getOrderByPager(Pageable pageable) {
         Page<OrderEntity> all = orderJpaRepository.findAll(pageable);
 

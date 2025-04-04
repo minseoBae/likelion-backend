@@ -1,11 +1,14 @@
 package com.inspire12.likelionbackend.module.jpa.controller;
 
+import com.inspire12.likelionbackend.module.core.aop.Config.PerformanceCheck;
 import com.inspire12.likelionbackend.module.jpa.model.request.OrderRequest;
 import com.inspire12.likelionbackend.module.jpa.model.response.OrderListResponse;
 import com.inspire12.likelionbackend.module.jpa.model.response.OrderResponse;
 import com.inspire12.likelionbackend.module.jpa.model.response.OrderSumResponse;
 import com.inspire12.likelionbackend.module.jpa.model.response.OrderSummaryResponse;
 import com.inspire12.likelionbackend.module.jpa.service.OrderService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,6 +34,7 @@ public class OrderController {
     }
 
     // 주문 조회 API
+    @PerformanceCheck
     @GetMapping
     public ResponseEntity<OrderListResponse> getOrder(
             @PageableDefault(page = 1, size = 10, sort = {"id"}, direction = Sort.Direction.ASC)
@@ -40,13 +44,14 @@ public class OrderController {
         return ResponseEntity.ok(orderByPager);
     }
 
-    // 주문 조회 API
-    @GetMapping("/items")
-    public ResponseEntity<OrderListResponse> getOrder() {
-        // TODO 구현하기
-        OrderListResponse orderByPager = orderService.getOrderItemsByPager(pageRequest);
-        return ResponseEntity.ok(orderByPager);
-    }
+//    // 주문 조회 API
+//    @GetMapping("/items")
+//    public ResponseEntity<OrderListResponse> getOrder() {
+//        // TODO 구현하기
+//        OrderListResponse orderByPager = orderService.getOrderByPager(pageRequest);
+//
+//        return ResponseEntity.ok(orderByPager);
+//    }
 
     // 주문 생성
     @PostMapping
