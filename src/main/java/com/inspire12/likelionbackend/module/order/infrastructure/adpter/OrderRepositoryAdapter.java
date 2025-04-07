@@ -7,7 +7,10 @@ import com.inspire12.likelionbackend.module.order.domain.OrderRepository;
 import com.inspire12.likelionbackend.module.order.infrastructure.repository.OrderJpaRepository;
 import com.inspire12.likelionbackend.module.order.infrastructure.repository.entity.OrderEntity;
 import com.inspire12.likelionbackend.module.order.support.mapper.OrderMapper;
+import com.inspire12.likelionbackend.module.store.domain.adapter.StoreApiAdapter;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class OrderRepositoryAdapter implements OrderRepository {
@@ -22,9 +25,16 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     public Order getOrderByOrderId(Long orderId) {
         // TODO:1 가계 도메인한테(책임을 위임해서) 가계가 열렸는지 확인한다
-        // TODO:2 가계가 열렸으면 orderId로 주문을 가져와 도메인 객체로 변환해 반환한다
+        StoreApiAdapter storeApiAdapter = new StoreApiAdapter();
+        OrderEntity newOrder = orderJpaRepository.findById(orderId)
+                .orElseThrow(OrderNotExistException::new);
 
-        throw new OrderNotExistException();
+        boolean storeStatus = storeApiAdapter.getStoreOpenStatus(newOrder.getStoreId());
+        // TODO:2 가계가 열렸으면 orderId로 주문을 가져와 도메인 객체로 변환해 반환한다
+        if(storeStatus) {
+            return OrderMapper.fromEntity(newOrder);
+        } else
+            throw new OrderNotExistException();
     }
 
 
